@@ -5,7 +5,7 @@ using TMPro;
 public class GooCounter : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI textBox;
-    private float gooScore;
+    [HideInInspector] public float gooScore;
 
     private void Update() {
         textBox.text = "Goo: " + gooScore.ToString("0");

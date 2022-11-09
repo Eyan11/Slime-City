@@ -10,12 +10,8 @@ public class TurtleController : MonoBehaviour
     [Header ("Settings")]
     [SerializeField] private float speed;
     [SerializeField] private float minFollowDistance;
-    [SerializeField] private float pulseIntervals;
-    private float pulseCooldown;
 
     [Header ("References")]
-    [SerializeField] private GameObject pulseRadius;
-    private TurtlePulse pulseScript;
     private Transform player;
     private Rigidbody2D body;
     private Camera sceneCamera;
@@ -24,12 +20,10 @@ public class TurtleController : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").transform;
         sceneCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        pulseScript = pulseRadius.GetComponent<TurtlePulse>();
-        pulseCooldown = pulseIntervals;
     }
 
     private void Update() {
-        PulseAttack();
+        //PulseAttack();
 
         if(Input.GetKeyDown("3")) {
             isSelectingTurtle = true;
@@ -39,7 +33,7 @@ public class TurtleController : MonoBehaviour
         }
 
         if(isSelectingTurtle) {
-            SelectingDog();
+            SelectingTurtle();
         }
         if (guardingPlayer) {
             GuardPlayerCalculations();
@@ -50,7 +44,7 @@ public class TurtleController : MonoBehaviour
         MoveTurtle();
     }
 
-    private void SelectingDog() {
+    private void SelectingTurtle() {
 
         if (Input.GetMouseButtonDown(0)) {
             guardingPlayer = false;
@@ -62,12 +56,12 @@ public class TurtleController : MonoBehaviour
     }
 
     private void GuardPlayerCalculations() {
-        // When dog is far from player
+        // When turtle is far from player
         if (Vector2.Distance(transform.position, player.transform.position) > minFollowDistance) {
             direction = -(transform.position - player.transform.position);
         }
 
-        // When dog is close to player
+        // When turtle is close to player
         else {
             direction = Vector2.zero;
         }
@@ -86,18 +80,5 @@ public class TurtleController : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, direction, speed * Time.deltaTime * 4.5f);
         }
 
-    }
-
-    //FIX PULSE MECHANIC
-    private void PulseAttack() {
-        pulseCooldown -= Time.deltaTime;
-        if(pulseCooldown <= 0) {
-            pulseRadius.SetActive(true);
-            Debug.Log("Pulse");
-            pulseCooldown = pulseIntervals;
-        }
-        else {
-            pulseRadius.SetActive(false);
-        }
     }
 }
