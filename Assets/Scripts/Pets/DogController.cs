@@ -125,6 +125,7 @@ public class DogController : MonoBehaviour
         if(firecooldown < 0 && !dontShoot) {
             GameObject projectile = Instantiate(bullet, firePoint.position, Quaternion.identity);
             projectile.GetComponent<Rigidbody2D>().AddForce(firePoint.up * bulletSpeed, ForceMode2D.Impulse);
+            FindObjectOfType<AudioManager>().Play("DogWeapon");
             firecooldown = fireIntervals;
         }
     }

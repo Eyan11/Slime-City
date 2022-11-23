@@ -6,12 +6,16 @@ public class TurtleController : MonoBehaviour
     private Vector2 direction;
     private bool guardingPlayer = true;
     private bool isSelectingTurtle = false;
+    private float shootTimer;
 
     [Header ("Settings")]
     [SerializeField] private float speed;
     [SerializeField] private float minFollowDistance;
+    [SerializeField] private float ShootInterval;
+    [SerializeField] private float bulletSpeed;
 
     [Header ("References")]
+    [SerializeField] private GameObject bullet;
     private Transform player;
     private Rigidbody2D body;
     private Camera sceneCamera;
@@ -23,7 +27,7 @@ public class TurtleController : MonoBehaviour
     }
 
     private void Update() {
-        //PulseAttack();
+        Shoot();
 
         if(Input.GetKeyDown("3")) {
             isSelectingTurtle = true;
@@ -80,5 +84,27 @@ public class TurtleController : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, direction, speed * Time.deltaTime * 4.5f);
         }
 
+    }
+
+    private void Shoot() {
+        shootTimer += Time.deltaTime;
+
+        if(shootTimer >= ShootInterval) {
+            GameObject projectileUp = Instantiate(bullet, transform.position, Quaternion.identity);
+            projectileUp.GetComponent<Rigidbody2D>().AddForce(transform.up * bulletSpeed, ForceMode2D.Impulse);
+
+            GameObject projectileDown = Instantiate(bullet, transform.position, Quaternion.identity);
+            projectileDown.GetComponent<Rigidbody2D>().AddForce(-transform.up * bulletSpeed, ForceMode2D.Impulse);
+
+            GameObject projectileLeft = Instantiate(bullet, transform.position, Quaternion.identity);
+            projectileLeft.GetComponent<Rigidbody2D>().AddForce(-transform.right * bulletSpeed, ForceMode2D.Impulse);
+
+            GameObject projectileRight = Instantiate(bullet, transform.position, Quaternion.identity);
+            projectileRight.GetComponent<Rigidbody2D>().AddForce(transform.right * bulletSpeed, ForceMode2D.Impulse);
+
+            FindObjectOfType<AudioManager>().Play("TurtleWeapon");
+            
+            shootTimer = 0;
+        }
     }
 }

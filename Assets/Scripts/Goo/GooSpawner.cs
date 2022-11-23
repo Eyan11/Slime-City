@@ -6,5 +6,6 @@ public class GooSpawner : MonoBehaviour
 
     public void SpawnGoo() {
         Instantiate(gooCollectable, transform.position, Quaternion.identity);
+        FindObjectOfType<AudioManager>().Play("EnemyDeath"); 
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3501553727301363177}
   - component: {fileID: 5985106554610365328}
   m_Layer: 0
-  m_Name: Dog Projectile
+  m_Name: Pet Projectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,4 +134,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cbd3fbdd1bd544e9b8b2740e437e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0.5
+  damage: 1

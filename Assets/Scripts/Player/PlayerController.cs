@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject sliderObject;
     [SerializeField] private InventorySlot inventoryScript;
     private Rigidbody2D body;
+    private float rayGunBeamAudioDelay = 0.7f;
+    private float rayGunBeamAudioTimer = 0f;
+    private bool playingRayGunBeamAudio = false;
 
     [Header ("Player Configurations")]
     [SerializeField] private float speed;
@@ -60,13 +63,21 @@ public class PlayerController : MonoBehaviour
             usingChargeRifle = false;
             sliderObject.SetActive(false);
             inventoryScript.HighlightSelectedSlot(1);
+            FindObjectOfType<AudioManager>().Play("SelectRayGun");
+
+            if (Input.GetMouseButton(0))
+                FindObjectOfType<AudioManager>().Play("RayGunStart");
         }
+
+        if(usingRayGun == false)
+            FindObjectOfType<AudioManager>().Pause("RayGunBeam");
 
         if(Input.GetKeyDown("2") && shopScript.hasChargeRifle()) {
             usingChargeRifle = true;
             usingRayGun = false;
             sliderObject.SetActive(true);
             inventoryScript.HighlightSelectedSlot(2);
+            FindObjectOfType<AudioManager>().Play("SelectChargeRifle"); 
         }
 
         if(Input.GetKeyDown("3") && shopScript.hasTurtle()) {
@@ -74,6 +85,7 @@ public class PlayerController : MonoBehaviour
             usingRayGun = false;
             sliderObject.SetActive(false);
             inventoryScript.HighlightSelectedSlot(3);
+            FindObjectOfType<AudioManager>().Play("SelectTurtle"); 
         }
 
         if(Input.GetKeyDown("4") && shopScript.hasDog()) {
@@ -81,6 +93,7 @@ public class PlayerController : MonoBehaviour
             usingRayGun = false;  
             sliderObject.SetActive(false);      
             inventoryScript.HighlightSelectedSlot(4);    
+            FindObjectOfType<AudioManager>().Play("SelectDog"); 
         }
 
         if(usingRayGun) {
@@ -110,6 +123,7 @@ public class PlayerController : MonoBehaviour
             }
             if(chargeRifleCountdown >= chargeRifleTime && Input.GetMouseButtonUp(0)) {
                 chargeRifleScript.Fire();
+                FindObjectOfType<AudioManager>().Play("ChargeRifle");
             }
         }
         
@@ -125,14 +139,29 @@ public class PlayerController : MonoBehaviour
         if(!usingRayGun) {
             return;
         }
-        else {
-            if(Input.GetMouseButton(0)) {
-                rayGunCollider.SetActive(true);
-            }
-            else {
-                rayGunCollider.SetActive(false);
+        if (Input.GetMouseButtonDown(0)) {
+            FindObjectOfType<AudioManager>().Play("RayGunStart");
+        }
+        else if (Input.GetMouseButton(0)) {
+            rayGunCollider.SetActive(true);
+
+            if (playingRayGunBeamAudio == false) {  
+                rayGunBeamAudioTimer += Time.deltaTime;
+                if(rayGunBeamAudioTimer >= rayGunBeamAudioDelay) {
+                    FindObjectOfType<AudioManager>().Play("RayGunBeam"); 
+                    playingRayGunBeamAudio = true;
+                }            
             }
         }
+        else if (Input.GetMouseButtonUp(0)) {
+            rayGunCollider.SetActive(false);
+            FindObjectOfType<AudioManager>().Pause("RayGunStart");
+            FindObjectOfType<AudioManager>().Pause("RayGunBeam");
+            FindObjectOfType<AudioManager>().Play("RayGunEnd");
+            rayGunBeamAudioTimer = 0f;
+            playingRayGunBeamAudio = false;
+        }
+        
     }
 
     private void Move() {
