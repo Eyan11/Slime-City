@@ -9,6 +9,7 @@ public class DogController : MonoBehaviour
     private GameObject[] multipleEnemies;
     private float firecooldown;
     private bool dontShoot = true;
+    [SerializeField] private Animator anim;
 
     [Header ("Settings")]
     [SerializeField] private float speed;
@@ -51,6 +52,9 @@ public class DogController : MonoBehaviour
         if (guardingPlayer) {
             GuardPlayerCalculations();
         }
+
+        //Animations
+        anim.SetBool("isSitting", direction == Vector2.zero || direction == new Vector2(transform.position.x, transform.position.y));
     }
 
     private void FixedUpdate() {

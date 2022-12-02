@@ -9,7 +9,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Update() {
         anim.SetFloat("MousePosition", rotationPoint.GetComponent<Rigidbody2D>().rotation);
-
+        
         playerVelocity = Mathf.Abs(body.velocity.x) + Mathf.Abs(body.velocity.y);
         anim.SetBool("isIdle", playerVelocity == 0);
     }

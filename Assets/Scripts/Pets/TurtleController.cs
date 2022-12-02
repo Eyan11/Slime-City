@@ -7,6 +7,7 @@ public class TurtleController : MonoBehaviour
     private bool guardingPlayer = true;
     private bool isSelectingTurtle = false;
     private float shootTimer;
+    private bool inShell = false;
 
     [Header ("Settings")]
     [SerializeField] private float speed;
@@ -16,6 +17,7 @@ public class TurtleController : MonoBehaviour
 
     [Header ("References")]
     [SerializeField] private GameObject bullet;
+    [SerializeField] private Animator anim;
     private Transform player;
     private Rigidbody2D body;
     private Camera sceneCamera;
@@ -28,6 +30,8 @@ public class TurtleController : MonoBehaviour
 
     private void Update() {
         Shoot();
+
+        TurtleAnimations();
 
         if(Input.GetKeyDown("3")) {
             isSelectingTurtle = true;
@@ -46,6 +50,8 @@ public class TurtleController : MonoBehaviour
 
     private void FixedUpdate() {
         MoveTurtle();
+
+        RotateTurtle();
     }
 
     private void SelectingTurtle() {
@@ -106,5 +112,30 @@ public class TurtleController : MonoBehaviour
             
             shootTimer = 0;
         }
+    }
+
+    private void RotateTurtle() {
+        if(inShell) {
+            return;
+        }
+
+        //Look at Player
+        float rotateDirection = Mathf.Atan2(-(transform.position.y - player.transform.position.y), -(transform.position.x - player.transform.position.x)) * Mathf.Rad2Deg + 90f;;
+        body.rotation = rotateDirection;
+    }
+
+    private void TurtleAnimations() {
+        //If position is equal to desired destination, then turtle is no longer moving
+        if(direction == new Vector2(transform.position.x, transform.position.y) && !inShell) {
+            anim.SetTrigger("IntoShell");
+            inShell = true;
+        }
+        else if(direction != new Vector2(transform.position.x, transform.position.y) && inShell) {
+            anim.SetTrigger("ExitShell");
+            inShell = false;
+        }
+
+        anim.SetBool("isIdle", direction == Vector2.zero);
+
     }
 }

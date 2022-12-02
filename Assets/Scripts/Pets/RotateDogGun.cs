@@ -4,8 +4,10 @@ public class RotateDogGun : MonoBehaviour
 {
     [Header ("References")]
     [SerializeField] private Transform dog;
+    [SerializeField] private Animator anim;
     private Rigidbody2D body;
     private Vector3 aimDirection;
+    private float dogVelocity;
 
     private void Awake() {
         body = GetComponent<Rigidbody2D>();
@@ -13,6 +15,11 @@ public class RotateDogGun : MonoBehaviour
 
     private void FixedUpdate() {
         RotateGun();
+    }
+
+    private void Update() {
+        //Animations
+        anim.SetFloat("Direction", body.rotation);
     }
 
     public void RotateGun() {
