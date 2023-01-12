@@ -9,6 +9,7 @@ public class ShopInteraction : MonoBehaviour
     [SerializeField] private int dogCost;
     [SerializeField] private int turtleCost;
     [SerializeField] private int chargeRifleCost;
+    [SerializeField] private int heartCost;
 
     [Header ("References")]
     [SerializeField] private GameObject dogObject;
@@ -24,11 +25,13 @@ public class ShopInteraction : MonoBehaviour
     private bool purchasedDog = false;
     private bool purchasedTurtle = false;
     private bool purchasedChargeRifle = false;
+    private Health playerHealth;
 
 
     private void Awake() {
         gooScript = GameObject.Find("Goo Counter").GetComponent<GooCounter>();
         playerTrans = GameObject.FindWithTag("Player").transform;
+        playerHealth = GameObject.FindWithTag("Player").GetComponent<Health>();
     }
 
     public void BuyDog() {
@@ -70,6 +73,17 @@ public class ShopInteraction : MonoBehaviour
         chargeRifleImage.color = new Color(turtleImage.color.r, turtleImage.color.g, turtleImage.color.b, 0.5f);
         checkChargeRifleImage.SetActive(true);
         purchasedChargeRifle = true;
+    }
+
+    public void BuyHeart() {
+        if(gooScript.gooScore < heartCost)
+            return;
+        if(playerHealth.currentHealth >= 3)
+            return;
+        
+        gooScript.gooScore -= heartCost;
+
+        playerHealth.addHeart();
     }
 
     public bool hasTurtle() {

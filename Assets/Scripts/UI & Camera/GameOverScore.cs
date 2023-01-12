@@ -7,10 +7,11 @@ public class GameOverScore : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textBox;
 
     public void RecieveScore(float finalScore) {
-        textBox.text = "Score: " + finalScore.ToString("0");
-        //Add high score
+
+        if(finalScore > PlayerPrefs.GetFloat("HighScore", 0)) {
+            PlayerPrefs.SetFloat("HighScore", finalScore);
+        }
+
+        textBox.text = "Score: " + finalScore.ToString("0") + "\nHighScore: " + PlayerPrefs.GetFloat("HighScore").ToString("0");
     }
-
-    
-
 }

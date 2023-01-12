@@ -77,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 2829020860292909968, guid: 506c6c8326d1ec84d90ae80d8cc46227, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -193,7 +193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24cbe08a4567c6041a4c89bb492485c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyGooAmount: 5
   gooCollectable: {fileID: 8757192618732497252, guid: 09e26100d4345d447a757762e69596c8, type: 3}
 --- !u!114 &3437139075354445489
 MonoBehaviour:
